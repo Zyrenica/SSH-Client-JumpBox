@@ -1,0 +1,26 @@
+name: jump #Set compose project name / container prefix (Mostly ignored in this configuration)
+
+x-template: &tunnel_template
+  pull_policy: never
+  restart: no
+  networks:
+    - sshjump
+  volumes:
+    - ./config:/home/jumpuser/.ssh/config:ro
+  profiles:
+    - donotstart
+
+services:
+  # Jump Services
+  <Config_Host>:
+    <<: *tunnel_template
+    image: ssh-jumpbox
+    environment:
+      - HOSTS=<Config_Host> # Host name in config to call
+      - PASSPHRASE=${PASSPHRASE} # Passphrase for gpg key decryption
+    ports:
+      - <host_alias_IP>:<external_IP>:<internal_IP_matching_config> # Bind to aliased host server IP to avoid CRSF token issues.
+      # Add other ports as required
+
+networks:
+  sshjump:

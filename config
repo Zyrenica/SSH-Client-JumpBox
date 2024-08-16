@@ -1,0 +1,6 @@
+host <name>
+    HostName <remote_ssh_ip>
+    User <login_user>
+    Port <remote_port>
+    LocalForward <local_port_matching_compose> <remote_server_ip>:<remote_server_port>
+    # Add more forwards as required
